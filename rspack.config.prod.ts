@@ -1,14 +1,15 @@
 import { Configuration, HtmlRspackPlugin } from "@rspack/core";
 import { AngularWebpackPlugin } from "@ngtools/webpack";
-
 import path from "path";
 
+const MinifyPlugin = require("@rspack/plugin-minify");
+
 export default {
-  mode: "development",
+  mode: "production",
 
   entry: {
     polyfills: path.resolve(__dirname, "src/polyfills"),
-    main: path.resolve(__dirname, "src/main"),
+    main: path.resolve(__dirname, "src/main.prod"),
   },
 
   devtool: false,
@@ -16,13 +17,15 @@ export default {
   output: {
     filename: "[fullhash].[name].js",
     path: path.resolve(__dirname, "dist"),
-    publicPath: "/",
+    publicPath: path.resolve(__dirname, "public"),
   },
 
   optimization: {
     splitChunks: {
       chunks: "all",
     },
+    minimize: true,
+    minimizer: [new MinifyPlugin()],
   },
 
   module: {
@@ -56,7 +59,7 @@ export default {
 
   plugins: [
     new AngularWebpackPlugin({
-      tsconfig: path.resolve(__dirname, "tsconfig.json"),
+      tsconfig: path.resolve(__dirname, "tsconfig.prod.json"),
       jitMode: true,
     }),
     new HtmlRspackPlugin({
