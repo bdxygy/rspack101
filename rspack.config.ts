@@ -1,6 +1,5 @@
-import { Configuration, HtmlRspackPlugin } from "@rspack/core";
+import { Configuration, DefinePlugin, HtmlRspackPlugin } from "@rspack/core";
 import { AngularWebpackPlugin } from "@ngtools/webpack";
-
 import path from "path";
 
 export default {
@@ -33,7 +32,7 @@ export default {
       },
       {
         test: /\.css$/i,
-        type: "css", // this is enabled by default for .css, so you don't need to specify it
+        type: "css",
       },
       {
         test: /\.?(svg|html|css|scss|less)$/,
@@ -55,6 +54,9 @@ export default {
   },
 
   plugins: [
+    new DefinePlugin({
+      environment: JSON.stringify("development"),
+    }),
     new AngularWebpackPlugin({
       tsconfig: path.resolve(__dirname, "tsconfig.json"),
       jitMode: true,

@@ -1,4 +1,4 @@
-import { Configuration, HtmlRspackPlugin } from "@rspack/core";
+import { Configuration, DefinePlugin, HtmlRspackPlugin } from "@rspack/core";
 import { AngularWebpackPlugin } from "@ngtools/webpack";
 import path from "path";
 
@@ -9,7 +9,7 @@ export default {
 
   entry: {
     polyfills: path.resolve(__dirname, "src/polyfills"),
-    main: path.resolve(__dirname, "src/main.prod"),
+    main: path.resolve(__dirname, "src/main"),
   },
 
   devtool: false,
@@ -58,8 +58,11 @@ export default {
   },
 
   plugins: [
+    new DefinePlugin({
+      environment: JSON.stringify("production"),
+    }),
     new AngularWebpackPlugin({
-      tsconfig: path.resolve(__dirname, "tsconfig.prod.json"),
+      tsconfig: path.resolve(__dirname, "tsconfig.json"),
       jitMode: true,
     }),
     new HtmlRspackPlugin({
